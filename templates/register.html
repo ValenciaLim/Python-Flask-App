@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+<style>
+ h1{
+ text-align: center;
+ }
+ form{
+ width: 30%;
+ margin: 2% auto;
+ border: 1px navy solid;
+ padding: 3%;
+ }
+ .form-group{
+ margin: 5% 0;
+ }
+ input[type=text], input[type=password]{
+ width: 90%;
+ }
+ .btn-primary{
+ background-color: navy;
+ color:white;
+ padding: 2% 5%;
+ border:none;
+ display: inline;
+ margin: 0 auto;
+ }
+ #gender li{
+ list-style-type: none;
+ }
+ label{
+ display:block;
+ }
+ #gender label{
+ display: inline;
+ }
+ .register-btn{
+ text-align: center;
+ }
+ .error_msg{
+ color: red;
+ width: 86%;
+ }
+</style>
+
+<h1 class="display-4">New Customer</h1>
+<form method="POST" action="">
+    <div class="form-group">
+    {{ render_field(form.username, class="form-control") }}
+    </div>
+    {% if 8 in error_msg %}
+        <p class = "error_msg">Your username cannot contain special characters or have a spacing</p>
+    {% endif %}
+    {% if 3 in error_msg2 %}
+        <p class = "error_msg">*This username has already been registered*</p>
+    {% endif %}
+    <div class="form-group">
+    {{ render_field(form.mobileNo, class="form-control") }}
+    </div>
+    {% if 7 in error_msg %}
+        <p class = "error_msg">You have an invalid mobile number</p>
+    {% endif %}
+    {% if 2 in error_msg2 %}
+    <p class = "error_msg">*This mobile number is already registered*</p>
+    {% endif %}
+    <div class = "form-group">
+        {{ render_field(form.email, class="form-control") }}
+    </div>
+    {% if 9 in error_msg %}
+        <p class = "error_msg">You have entered an invalid Email Address</p>
+    {% endif %}
+    {% if 1 in error_msg2 %}
+        <p class = "error_msg">*This Email Address is already registered*</p>
+    {% endif %}
+    <div class = "form-group">
+        {{ render_field(form.password, class="form-control") }}
+    </div>
+    {% if 1 in error_msg %}
+        <p class = "error_msg">Your password must be 8 characters long and must include a number, upper and lower case letter and a special symbol</p>
+    {% endif %}
+    <div class = "form-group">
+        {{ render_field(form.Confirm_Password, class="form-control") }}
+    </div>
+    {% if 6 in error_msg %}
+        <p class = "error_msg">Your passwords do not match</p>
+    {% endif %}
+    <div class = "form-group">
+        {{ render_field(form.gender, class = "form-control") }}
+    </div>
+    <div class="register-btn">
+        <input type="submit" value="Register" class="btn btn-primary"/>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base_admin.html" %}
+{% block title %}Library Loan System - Retrieve Users{% endblock %}
+
+{% block content %}
+<div class="col p-4">
+<div class="card border-dark mb-3">
+<div class="card-header">
+<h1 class="text-center mb-0">View Accounts</h1>
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Mobile Number</th>
+                <th>Email</th>
+                <th>gender</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for account in accountList %}
+            <tr>
+                <td>{{ account.get_username() }}</td>
+                <td>{{ account.get_mobileNo() }}</td>
+                <td>{{ account.get_email() }}</td>
+                <td>{{ account.get_gender() }}</td>
+                <td>
+                    <form action="{{url_for('deleteAcctUser', id=account.get_i_d())}}" method="POST">
+                        <input type="submit" value="Delete" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this user?');">
+                    </form>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+{% endblock %}

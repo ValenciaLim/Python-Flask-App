@@ -1,0 +1,68 @@
+{% extends "base_admin.html" %}
+{% block title %}Aftershock - Create User{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+
+<style>
+ p {
+ color: red;
+ }
+</style>
+ <div class="col p-4">
+
+  <!-- form card login with validation feedback -->
+  <div class="card border-dark mb-3">
+  <div class="card-header">
+  <h3 class="text-center mb-0">New Supplier</h3>
+  </div>
+
+ <div class="card-body">
+ <form method="POST" action="" class="justify-content-center">
+ <div class="card-body">
+  <p>* required</p>
+ <div class="form-group">
+  <label for = "suppliername"> Supplier Name </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.suppliername, class="form-control", placeholder = "Enter your name" ) }}
+ </div>
+  <div class="form-group">
+  <label for = "companyname"> Company Name </label><p style="display:inline-block;">*</p>
+ {{ render_field( form.companyname, class="form-control", placeholder = "Enter your company name") }}
+ </div>
+ <div class="form-group">
+  <label for = "address"> Company Address </label><p style="display:inline-block;">*</p>
+ {{ render_field( form.address, class="form-control", placeholder = "Enter your company address") }}
+ </div>
+ <div class="form-group">
+  <label for = "contactno"> Contact Number </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.contactno, class="form-control", placeholder = "Enter your contact number") }}
+ </div>
+  {% if error_msg == 1%}
+    <p class="error-msg"> Contact number must be 8 digits in length and start with either 6, 8 or 9! </p>
+  {% endif %}
+ <div class="form-group">
+  <label for = "email"> Email </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.email, class="form-control", placeholder = "Enter your email address") }}
+ </div>
+ <div id="prof">
+ <div class="form-group">
+  <label for = "remarks"> Remarks </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.remarks, class="form-control", placeholder = "Enter remarks (if no remarks put NIL) ") }}
+ </div>
+ </div>
+ <input type="submit" value="Submit" id ="button" class="btn btn-outline-danger" onclick="popup()">
+ </div>
+</form>
+</div>
+ </div>
+ </div>
+
+<script>
+function popup()
+    {% if duplicate == true %}{
+       alert("Duplicate Data. Supplier has already been created!");
+    {% else %}{
+       alert("Supplier successfully created")
+    {% endif %}
+}
+</script>
+{% endblock %}

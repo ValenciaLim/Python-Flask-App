@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+
+<style>
+ h1{
+ text-align: center;
+ }
+ form{
+ width: 25%;
+ margin: 2% auto;
+ padding: 3%;
+ }
+ input[type=text], input[type=password]{
+ width: 90%;
+ }
+ .form-group{
+ margin: 5% 0;
+ }
+ .forgot-btn{
+ background-color:none;
+ color:grey;
+ display: inline;
+ }
+ .btn-btn-primary{
+ background-color: navy;
+ color: white;
+ border:none;
+ display: inline;
+ padding: 2% 5%;
+ }
+ .login-option{
+ text-align: center;
+ margin: 0 auto;
+ }
+ .customer{
+ border: 1px red solid;
+ color:red;
+ padding: 1% 5.2%;
+ display: inline;
+ margin-right: -0.2%;
+ }
+ label{
+ display:block;
+ }
+ #identity label{
+ display:inline;
+ }
+ #identity li{
+ list-style-type:none;
+ }
+
+</style>
+
+<h1 class="display-4">Login</h1>
+<form method="POST" action="">
+  <div class="form-group">
+ {{ render_field(form.Username, class="form-control") }}
+ </div>
+ {% if 1 in error_msg %}
+   <p class = "error_msg">*No Account is created under this username*</p>
+ {% endif %}
+ <div class="form-group">
+ {{ render_field(form.Password, class="form-control") }}
+ </div>
+ <a class="forgot-btn" href ="/forgotpass" >Forgot password?</a>
+ <input type="submit" value="login" class="btn-btn-primary"/>
+</form>
+{% endblock %}
+

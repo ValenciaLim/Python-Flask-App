@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        body { margin:0;padding:0; }
+        .container-fluid{
+        min-height: 72.3vh;
+        }
+    </style>
+</head>
+<body>
+    {% block navbar %}
+        {% include 'includes/Navi.html' %}
+    {% endblock %}
+
+    <div class="container-fluid">
+    {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block scripts %}
+    {% endblock %}
+
+    {% block footer %}
+        {% include 'includes/footer.html' %}
+    {% endblock %}
+</body>
+</html>

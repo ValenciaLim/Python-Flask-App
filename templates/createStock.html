@@ -1,0 +1,122 @@
+{% extends "base_admin.html" %}
+{% block title %}Aftershock - Create Stock{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+<style>
+ .icon {
+ background-color: rgba(0,0,0,.03);
+ display: inline-block;
+ text-align: center;
+ vertical-align: text-top;
+ box-sizing: border-box;
+ padding: 0.5%;
+ width: 30px;
+ height: 39px;
+ margin-right: -0.8%;
+ }
+
+ #date {
+ display: inline-block;
+ width: 96.5%;
+ vertical-align: text-top;
+ }
+
+ p {
+ color: red;
+ }
+
+</style>
+<div class="col p-4">
+
+<span class="anchor" id="formLogin"></span>
+
+ <!-- form card login with validation feedback -->
+ <div class="card border-dark mb-3">
+ <div class="card-header">
+ <h3 class="text-center mb-0">New Stock</h3>
+ </div>
+
+ <div class="card-body">
+ <form method="POST" action="" class="justify-content-center">
+ <div class="card-body">
+  <p>* required</p>
+ <div class="form-group">
+  <label id= "date" style="display: block;"> Date <p style = "display: inline-block;">*</p> </label>
+ <div class = "icon">
+  <i class="fa fa-calendar"></i>
+ </div>
+ {{ render_field(form.date, class="form-control", placeholder = "Enter date (DD-MM-YYYY)") }}
+ </div>
+ <div class="form-group">
+  <label for= "suppliername"> Supplier Name </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.suppliername, class="form-control", placeholder = "Enter your supplier name") }}
+ </div>
+ <div class="form-group">
+    <label for= "companyname"> Company Name </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.companyname, class="form-control", placeholder = "Enter your company name") }}
+ </div>
+ <div class="form-group">
+    <label for = "productname"> Product Name </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.productname, class="form-control", placeholder = "Enter product name") }}
+ </div>
+ <div class="form-group">
+    <label for = "costprice"> Cost Price </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.costprice, class="form-control", placeholder = "Enter cost price") }}
+ </div>
+  {% if 1 in error%}
+    <p class="error-msg">Invalid Price (Price cannot be negative, zero or contains letters)</p>
+  {% endif %}
+ <div class="form-group">
+    <label for = "quantity"> Quantity </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.quantity, class="form-control", placeholder = "Enter your company address") }}
+ </div>
+  {% if 2 in error%}
+    <p class="error-msg">Invalid Quantity (Quantity cannot be negative, zero or contains letters)</p>
+  {% endif %}
+ <div id="prof">
+ <div class="form-group">
+    <label for = "description"> Description </label><p style="display:inline-block;">*</p>
+ {{ render_field(form.description, class="form-control", placeholder = "Enter product description (If no description enter NIL)" ) }}
+ </div>
+ </div>
+ <input type="submit" value="Submit" class="btn btn-outline-danger"/>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+<script>
+  $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+
+  document.getElementById("suppliername").addEventListener("change", dropdown);
+
+  function dropdown(){
+       var supplier = document.getElementById("suppliername");
+       var company = document.getElementById("companyname");
+       supplier_value = supplier.value;
+       company.value = {{supplierDict|tojson}}[supplier_value];
+  }
+</script>
+{% endblock %}

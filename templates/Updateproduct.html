@@ -1,0 +1,60 @@
+{% extends "base_admin.html" %}
+{% block title %}Library Loan System - Update Product{% endblock %}
+
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+<style>
+.errormsg {
+    color:red;
+}
+</style>
+
+<h1 class="display-4">Update Product</h1>
+
+<form method="POST" action="">
+    <div class="form-group">
+        {{ render_field(form.Image, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.Name, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Price, class="form-control") }}
+    </div>
+    <div>
+        {% if 1|string in errormsg %}
+        <p class = "errormsg">Please enter valid price.</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Quantity, class="form-control") }}
+    </div>
+    <div>
+        {% if 2|string in errormsg %}
+        <p class = "errormsg">Please enter valid quantity.</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Cpu, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Graphic, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.Weight, class="form-control") }}
+    </div>
+    <div>
+        {% if 3|string in errormsg %}
+        <p class = "errormsg">Please enter valid Weight.</p>
+        {% endif %}
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+
+{% endblock %}
+

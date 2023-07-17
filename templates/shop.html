@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+{% block content %}
+<style media="screen">
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.container {
+ text-align: center;
+}
+
+.card {
+  display: inline-block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 350px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+  margin:50px;
+}
+
+.price {
+  color: grey;
+  font-size: 24px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 24px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+
+hr {
+  border-top: 1px solid black;
+}
+</style>
+<script>
+  window.onload = function(){
+    user = {{ user }}
+    if (user == login){
+    document.getElementById("login").innerText = "logout";
+    document.getElementById("login").setAttribute("href", "/logout")
+    }
+  }
+</script>
+
+<body>
+  <div class="container">
+    <br>
+    <h1 class="title">FORGE SERIES</h1>
+    <h5 class="description">If your looking to get the most performance at the best price/performance ratio, the FORGE series delivers in spades.</h5>
+
+    <div>
+      {% for laptop in laptopsList %}
+      <div class="card">
+        <img src="{{ laptop.get_Image() }}" alt="FORGE 15" style="max-width:100%">
+        <br><br>
+        <h2>{{ laptop.get_Name() }}</h2>
+        <p class="price">SGD  ${{ laptop.get_Price() }}</p>
+        <hr>
+        <h5><u>Specifications</u></h5>
+        <p>{{ laptop.get_Cpu() }}</p>
+        <p>{{ laptop.get_Graphic() }}</p>
+        <p>{{ laptop.get_Weight() }} kg</p>
+        <form action="{{url_for('toIndividualProduct')}}" method="POST">
+          <button type="submit" name="laptopID" value="{{ laptop.get_laptopID() }}">Select</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+
+{% endblock %}

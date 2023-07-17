@@ -1,0 +1,73 @@
+{% extends "base_admin.html" %}
+{% block title %}Aftershock - Add Product{% endblock %}
+
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+
+<style>
+.errormsg {
+    color:red;
+}
+</style>
+<div class="col p-4">
+<span class="anchor" id="formLogin"></span>
+
+ <div class="card border-dark mb-3">
+ <div class="card-header">
+ <h3 class="text-center mb-0">Create Product</h3>
+ </div>
+
+ <div class="card-body">
+<form method="POST" action="">
+    <div class="form-group">
+        {{ render_field(form.ID, class="form-control") }}
+    </div>
+     <div class="form-group">
+        {{ render_field(form.Image, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Name, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Price, class="form-control") }}
+    </div>
+    <div>
+        {% if 1 in errormsg %}
+        <p class = "errormsg">Please enter valid price.</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Quantity, class="form-control") }}
+    </div>
+    <div>
+        {% if 2 in errormsg %}
+        <p class = "errormsg">Please enter valid quantity.</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Cpu, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Graphic, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ render_field(form.Weight, class="form-control") }}
+    </div>
+    <div>
+        {% if 3 in errormsg %}
+        <p class = "errormsg">Please enter valid Weight.</p>
+        {% endif %}
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+ </div>
+ </div>
+</div>
+{% endblock %}

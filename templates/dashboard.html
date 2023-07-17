@@ -1,0 +1,119 @@
+{% extends "base_admin.html" %}
+{% block title %}Aftershock - Retrieve Cart{% endblock %}
+{% block content %}
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+</head>
+<style>
+    .canvas{
+    width: 60%;
+    margin: 3% auto;
+    }
+    .canvas h3{
+    text-align: center;
+    margin: 2%;
+    color: navy;
+    }
+    .canvas h5{
+    color: red;
+    }
+</style>
+
+<h1 class="display-4">Dashboard</h1>
+<div class="canvas">
+    <h3>Report (For the Year)</h3>
+    <h5>Revenue: ${{ revenue_month }}</h5>
+    <!-- bar chart canvas element -->
+    <canvas id="myChart_year" width="600" height="400"></canvas>
+</div>
+<div class="canvas">
+    <h3>Report (For the Month)</h3>
+    <h5>Revenue: ${{ revenue_day }}</h5>
+    <!-- bar chart canvas element -->
+    <canvas id="myChart_month" width="600" height="400"></canvas>
+</div>
+
+<script>
+Chart.defaults.global.responsive = false;
+Chart.defaults.global.legend.display = false;
+
+// define the chart data
+var chartData_year = {
+  labels : [{% for item in labels_month %}
+             "{{item}}",
+            {% endfor %}],
+  datasets : [{
+    lineTension: 0.1,
+    backgroundColor: "rgba(0, 123, 255, 0.4)",
+    borderColor: "rgba(0, 123, 255, 1)",
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    pointBorderColor: "rgba(75,192,192,1)",
+    pointBackgroundColor: "#fff",
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+    pointHoverBorderColor: "rgba(220,220,220,1)",
+    pointHoverBorderWidth: 2,
+    pointRadius: 1,
+    pointHitRadius: 10,
+    data : [{% for item in values_month %}
+            {{item}},
+          {% endfor %}],
+    spanGaps: false
+  }]
+}
+
+// get chart canvas
+var ctx = document.getElementById("myChart_year").getContext("2d");
+
+// create the chart using the chart canvas
+var myChart_year = new Chart(ctx, {
+  type: 'line',
+  data: chartData_year,
+});
+
+
+// define the chart data
+var chartData_month = {
+  labels : [{% for item in labels_day %}
+             "{{item}}",
+            {% endfor %}],
+  datasets : [{
+    label: '' ,
+    lineTension: 0.1,
+    backgroundColor: "rgba(0, 123, 255, 0.4)",
+    borderColor: "rgba(0, 123, 255, 1)",
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    pointBorderColor: "rgba(0, 123, 255, 1)",
+    pointBackgroundColor: "#fff",
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: "rgba(0, 123, 255, 1)",
+    pointHoverBorderColor: "rgba(0, 123, 255, 1)",
+    pointHoverBorderWidth: 2,
+    pointRadius: 1,
+    pointHitRadius: 10,
+    data : [{% for item in values_day %}
+            {{item}},
+          {% endfor %}],
+    spanGaps: false
+  }]
+}
+
+// get chart canvas
+var ctx = document.getElementById("myChart_month").getContext("2d");
+
+// create the chart using the chart canvas
+var myChart_month = new Chart(ctx, {
+  type: 'line',
+  data: chartData_month,
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Check Out{% endblock %}
+{% block content %}
+<style>
+    body{
+    font-family: Arial;
+    }
+    h1{
+    text-align: center;
+    }
+    .checkout{
+    width: 85%;
+    margin: 2% auto;
+    }
+    .payment{
+    float: left;
+    width: 40%;
+    height: 44%;
+    margin: 2%;
+    }
+    .address, .contactInfo{
+    float: left;
+    width: 40%;
+    height: 24%;
+    margin: 2%;
+    }
+    .address button{
+    background-color: navy;
+    color: white;
+    border: none;
+    padding: 1.8% 4.2%;
+    margin: 2% 0;
+    }
+    .products{
+    box-sizing: border-box;
+    padding: 2% 3%;
+    }
+    .product{
+    clear: both;
+    margin: 2%;
+    }
+    .products{
+    border: 1px solid black;
+    }
+    .products div{
+    display: inline-block;
+    }
+    .products div:first-child p{
+    margin-top: 0;
+    }
+    .products h3{
+    margin-bottom: 0;
+    margin-top: 0;
+    }
+    .products div:nth-child(2){
+    margin-left: 8%;
+    }
+    .proceed{
+    margin: 2% 0;
+    text-align: right;
+    }
+    .proceed h3, .proceed form{
+    display: inline;
+    margin-left: 2%;
+    }
+    input[type="submit"]{
+    background-color: navy;
+    color: white;
+    border:none;
+    display: inline;
+    padding: 0.8% 3%;
+    }
+    input[type="submit"]:hover{
+    background-color: RoyalBlue;
+    }
+    .info{
+    display: inline-block;
+    width: 30%;
+    }
+    .img{
+    display: inline-block;
+    width:12%;
+    height: auto;
+    }
+    .img img{
+    max-width:100%;
+    max-height: 100%;
+    }
+    .prices{
+    margin-left: 30%;
+    }
+    #success_popup{
+    background-color: navy;
+    color: white;
+    display:none;
+    width: 30%;
+    text-align: center;
+    padding: 2%;
+    z-index: 1;
+    position: fixed;
+    top: 30%;
+    left: 30%;
+    }
+    #success_popup .close {
+      color: white;
+      float: right;
+      margin-right: -1%;
+      margin-top: -1%;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    #success_popup .close:hover, #success_popup .close:focus {
+      color: red;
+      text-decoration: none;
+      cursor: pointer;
+    }
+</style>
+<script>
+    window.onload = function(){
+        methods = document.getElementsByClassName("methods");
+        for (i=0;i<methods.length;i++){
+        methods[i].style.display = "none";
+        }
+        methods[{{ method }}].style.display = "block";
+
+        user = {{ user }}
+        if (user == login){
+        document.getElementById("login").innerText = "logout";
+        document.getElementById("login").setAttribute("href", "/logout")
+        }
+    }
+
+    function popup(){
+    modal = document.getElementById('success_popup');
+    modal.style.display = "block";
+    }
+    function redirect(){
+    modal = document.getElementById('success_popup');
+    window.location.href = "{{ url_for('home') }}";
+    }
+</script>
+<h1 class="display-4">Check Out</h1>
+<div class="checkout">
+    <div class="payment">
+        <h2>Payment Details</h2>
+        <div class="methods">
+            <p>Card Type: {{ payment["CardType"] }}</p>
+            <p>Card Number: {{ payment["CardNo"] }}</p>
+            <p>Expiry Date: {{ payment["ExpiryDate"] }}</p>
+            <p>CVV: {{ payment["CVV"] }}</p>
+            <p>Addressee Name: {{ payment["AddresseeName"] }}</p>
+        </div>
+        <div class="methods"><p style="font-weight:bold;">Through PayPal</p></div>
+        <div class="methods"><p style="font-weight:bold;">Cash-on Delivery</p></div>
+    </div>
+    <div class="address">
+        <h2>Address</h2>
+        <div>
+            <p>Full Address: {{ address["FullAddress"] }}</p>
+            <p>Postal Code: {{ address["PostalCode"] }}</p>
+        </div>
+    </div>
+    <div class="contactInfo">
+        <h2>Contact Information</h2>
+        <div>
+            <p>Mobile Number: {{ contact["MobileNo"] }}</p>
+            <p>Email Address: {{ contact["EmailAddress"] }}</p>
+        </div>
+    </div>
+    <div class="product">
+        <h2>Products</h2>
+        {% for c in cart %}
+        <div class="products">
+            <div class="img">
+                <img src="{{ c['Product'].get_Image() }}">
+            </div>
+            <div class="info">
+                <h3>{{ c['Product'].get_Name() }}</h3>
+                <p>{{ c['Product'].get_Cpu() }}</p>
+                <p>{{ c['Product'].get_Graphic() }}</p>
+                <p>{{ c['Product'].get_Weight() }}</p>
+            </div>
+            <div class="prices">
+                <p>${{ c['Product'].get_Price() }} x {{ c['Quantity']}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="proceed">
+        <h3>Total: ${{ totalamt }}</h3>
+        <form action="{{url_for('addSales')}}" method="POST">
+                <input type="submit" value="Checkout" onclick="popup()">
+        </form>
+    </div>
+</div>
+<div id="success_popup" style="display: none;">
+    <span class="close" onclick="redirect()">&times;</span>
+    <h3>Checkout Successful!</h3>
+</div>
+{% endblock %}

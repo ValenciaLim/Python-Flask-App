@@ -1,0 +1,109 @@
+{% extends "base_admin.html" %}
+{% block title %}Aftershock - Retrieve Orders{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .fa{
+    background-color: transparent;
+    border: none;
+    }
+    .fa:hover{
+    color: #007bff;
+    }
+    .fa:focus{
+    outline: none;
+    }
+    input[type=submit]{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.2% 2%;
+    border-radius: 10%;
+    }
+    input[type=submit]:hover{
+    background-color: navy;
+    }
+</style>
+<script>
+    function open_sales(x){
+    var info_list = document.getElementsByClassName("fa fa-caret-square-o-down");
+    var info_id = Array.from(info_list).indexOf(x);
+    var info_section = document.getElementsByClassName("sales-info")[info_id];
+    if (info_section.style.display == "none"){
+        info_section.style.display = "table-row";
+        }
+    else{
+        info_section.style.display = "none";
+        }
+    }
+</script>
+<div class="col p-4">
+ <div class="card-header">
+ <h3 class="text-center mb-0">View Orders</h3>
+ </div>
+  <br>
+    <form action="" method="POST">
+        <select name="order_sort">
+            <option value="Transaction Date">Transaction Date</option>
+            <option value="Customer ID">Customer ID</option>
+            <option value="Status">Status</option>
+        </select>
+        <input type="submit" value="sort">
+    </form>
+ <div class="card-body">
+     {% for key in salesDict %}
+     <p style="font-weight: bold;">{{ sort }}: {{ key }}</p>
+     <table class="table table-striped">
+         <thead>
+             <tr>
+             <th>Order ID</th>
+             <th>Customer ID</th>
+             <th>Status</th>
+             <th>Transaction Date</th>
+             <th></th>
+             </tr>
+         </thead>
+         <tbody>
+            {% for s in salesDict[key] %}
+                 <tr>
+                     <td>{{ s.get_sales_id() }}</td>
+                     <td>{{ s.get_customer_id() }}</td>
+                     <td>{{ s.get_status() }}</td>
+                     <td>{{ s.get_transaction_date() }}</td>
+                     <td>
+                         <form action="{{url_for('updateOrderStatus', id=s.get_sales_id())}}"  method="POST">
+                             <button type="submit"  class="btn btn-outline-warning">Update</button>
+                         </form>
+                     </td>
+                     <td>
+                         <button class="fa fa-caret-square-o-down" aria-hidden="true" onclick="open_sales(this)"></button>
+                     </td>
+                 </tr>
+                 <tr class="sales-info" style="display: none;">
+                     <td colspan="5" style="padding: 0;">
+                         <table style="width: 109.5%;">
+                             <tr style="background: #007bff; color: white;">
+                                 <th>Product</th>
+                                 <th>Details</th>
+                                 <th>Price</th>
+                                 <th>Quantity</th>
+                             </tr>
+                             {% for i in range(s.get_bought_products()|length) %}
+                             <tr style="border-bottom: 1px solid #dee2e6;">
+                                 <td>{{ s.get_bought_products()[i]['Product'].get_Name() }}</td>
+                                 <td>{{ s.get_bought_products()[i]['Product'].get_Cpu() }} {{ s.get_bought_products()[i]['Product'].get_Graphic() }} {{ s.get_bought_products()[i]['Product'].get_Weight() }}kg </td>
+
+                                 <td>{{ s.get_bought_products()[i]['Product'].get_Price() }}</td>
+                                 <td>{{ s.get_bought_products()[i]['Quantity'] }}</td>
+                             </tr>
+                         {% endfor %}
+                         </table>
+                     </td>
+                 </tr>
+            {% endfor %}
+         </tbody>
+     </table>
+     {% endfor %}
+ </div>
+</div>
+{% endblock %}

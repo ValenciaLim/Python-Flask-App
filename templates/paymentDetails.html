@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}Aftershock - Payment Details{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+<style media="screen">
+    body{
+    color: black;
+    font-family: Arial;
+    }
+    h1{
+    text-align: center;
+    }
+    h3{
+    color: navy;
+    margin-top: 0;
+    }
+    .form {
+    box-sizing: border-box;
+    width: 80%;
+    margin: 2% auto;
+    padding: 2%;
+    }
+    .form-group{
+    margin: 3% 0;
+    }
+    .form-control{
+    width: 100%;
+    display: block;
+    }
+    form>div{
+    display: inline-block;
+    vertical-align: text-top;
+    width: 48%;
+    }
+    .error-msg{
+    color: red;
+    width: 86%;
+    }
+
+    #paymentMethod{
+    margin-left:-10%;
+    }
+    #paymentMethod li{
+    list-style-type: none;
+    background-color: transparent;
+    border: 1px solid navy;
+    padding: 2%;
+    width: 40%;
+    display: inline-block;
+    }
+    #paymentMethod li:last-child{
+    width: 84.5%;
+    }
+
+    #cardType, #cardNo, #username, #password{
+    width: 86%;
+    }
+    #expiryMonth, #expiryYear{
+    display: inline;
+    width: 20%;
+    }
+    #expiry-date, #shipping-address{
+    display: block;
+    }
+    #cvv{
+    width: 20%;
+    }
+
+    .contact, .address{
+    width: 90%;
+    margin-bottom: 6%;
+    }
+    #address-select {
+    width: 72%;
+    }
+    #new-address-btn{
+    background-color: transparent;
+    padding: 1% 2%;
+    margin-left: 2%;
+    background-color: navy;
+    color: white;
+    border: none;
+    }
+    input[type="submit"]{
+    background-color: navy;
+    color: white;
+    border:none;
+    width: 20%;
+    padding: 1.2% 0;
+    }
+    input[type="submit"]:hover{
+    background-color: RoyalBlue;
+    }
+</style>
+<script>
+    window.onload = function(){
+        document.getElementById("fullAddress").disabled = true;
+        document.getElementById("postalCode").disabled = true;
+
+        radioList = document.getElementsByName("paymentMethod");
+        for (i=0;i<radioList.length;i++){
+            radioList[i].addEventListener("change", radio_check)
+        }
+
+        methods = document.getElementsByClassName("methods")
+        {% if method_index == -1 %}
+        document.getElementById("paymentMethod-0").checked = true;
+        document.getElementById("paymentMethod-0").parentElement.style.backgroundColor = "navy";
+        document.getElementById("paymentMethod-0").parentElement.style.color = "white";
+
+        document.getElementById("cardType").required = true;
+        document.getElementById("cardNo").required = true;
+        document.getElementById("expiryMonth").required = true;
+        document.getElementById("expiryYear").required = true;
+        document.getElementById("cvv").required = true;
+        {% endif %}
+        {% if method_index != -1 %}
+            methods[{{ method_index }}].checked = true;
+            methods[{{ method_index }}].style.display = "block";
+            document.getElementById("paymentMethod-0").parentElement.style.backgroundColor = "navy";
+            document.getElementById("paymentMethod-0").parentElement.style.color = "white";
+        {% endif %}
+
+        user = {{ user }}
+        if (user == login){
+        document.getElementById("login").innerText = "logout";
+        document.getElementById("login").setAttribute("href", "/logout")
+        }
+    }
+
+    function radio_check(){
+        radioList = document.getElementsByName("paymentMethod");
+        checked_radio = -1
+        for (i=0;i<radioList.length;i++){
+            if (radioList[i] == this){
+            radioList[i].parentElement.style.backgroundColor = "navy";
+            radioList[i].parentElement.style.color = "white";
+            checked_radio = i
+            }
+            else{
+            radioList[i].parentElement.style.backgroundColor = "transparent";
+            radioList[i].parentElement.style.color = "black";
+            }
+        }
+
+        methods = document.getElementsByClassName("methods")
+        for (i=0;i<methods.length;i++){
+            methods[i].style.display = "none";
+        }
+        methods[checked_radio].style.display = "block";
+        if (methods[0].style.display == "block"){
+            document.getElementById("cardType").required = true;
+            document.getElementById("cardNo").required = true;
+            document.getElementById("expiryMonth").required = true;
+            document.getElementById("expiryYear").required = true;
+            document.getElementById("cvv").required = true;
+        }
+        if (methods[1].style.display == "block"){
+            document.getElementById("username").required = true;
+            document.getElementById("password").required = true;
+            document.getElementById("cardType").required = false;
+            document.getElementById("cardNo").required = false;
+            document.getElementById("expiryMonth").required = false;
+            document.getElementById("expiryYear").required = false;
+            document.getElementById("cvv").required = false;
+        }
+
+        if (checked_radio == 2){
+            document.getElementById("username").required = false;
+            document.getElementById("password").required = false;
+            document.getElementById("cardType").required = false;
+            document.getElementById("cardNo").required = false;
+            document.getElementById("expiryMonth").required = false;
+            document.getElementById("expiryYear").required = false;
+            document.getElementById("cvv").required = false;
+        }
+    }
+
+    function enable(){
+    document.getElementById("address-select").required = false;
+    document.getElementById("fullAddress").disabled = false;
+    document.getElementById("fullAddress").setAttribute("placeholder", "blk, neighbourhood, street, building name, unit number")
+    document.getElementById("postalCode").required = true;
+    document.getElementById("postalCode").disabled = false;
+    document.getElementById("address-field").style.display = "block";
+    document.getElementById("fullAddress").required = true;
+    }
+</script>
+
+<h1 class="display-4">Payment Details</h1>
+<div class="form">
+    <form action="" method="POST">
+        <div>
+            <div>
+                <h3>Payment Method</h3>
+                <div class="form-group">
+                    {{ render_field(form.paymentMethod, class="form-control") }}
+                </div>
+            </div>
+            <div class="methods">
+                <h3>Credit or Debit Card</h3>
+                <div class="form-group">
+                    {{ render_field(form.cardType, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ render_field(form.cardNo, class="form-control") }}
+                </div>
+                {% if 1 in error_msg %}
+                    <p class="error-msg">Invalid Card Number!</p>
+                {% endif %}
+                <div class="form-group">
+                    <label id="expiry-date">Expiry Date: </label>
+                    {{ render_field(form.expiryMonth, class="form-control") }} / {{ render_field(form.expiryYear, class="form-control") }}
+                </div>
+                {% if 4 in error_msg %}
+                    <p class="error-msg">Invalid expiry date!</p>
+                {% endif %}
+                <div class="form-group">
+                    {{ render_field(form.cvv, class="form-control") }}
+                </div>
+                {% if 2 in error_msg %}
+                    <p class="error-msg">Invalid cvv!</p>
+                {% endif %}
+            </div>
+            <div class="methods" style="display: none;">
+                <h3>PayPal</h3>
+                <div class="form-group">
+                    {{ render_field(form.username, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ render_field(form.password, class="form-control") }}
+                </div>
+            </div>
+            <div class="methods" style="display: none;"></div>
+        </div>
+        <div>
+            <div class="address">
+                <h3>Address</h3>
+                <div class="form-group">
+                    {{ render_field(form.addresseeName, class="form-control") }}
+                </div>
+                <div>
+                    <label id="shipping-address">Shipping Address: </label>
+                    <select name="select" id="address-select" required>
+                        {% for a in address %}
+                        <option>{{ a["FullAddress"] }} {{ a["PostalCode"]}}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" id="new-address-btn" onclick="enable()">New Address</button>
+                </div>
+                <div id="address-field" style="display: none;">
+                    <div class="form-group">
+                        {{ render_field(form.fullAddress, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ render_field(form.postalCode, class="form-control") }}
+                    </div>
+                    {% if 3 in error_msg %}
+                        <p class="error-msg">Invalid postal code!</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="contact">
+                <h3>Contact Information</h3>
+                <p>Mobile Number: {{ contact["MobileNo"] }}</p>
+                <p>Email address: {{ contact["EmailAddress"] }}</p>
+            </div>
+        </div>
+        <input type="submit" value="Proceed">
+    </form>
+</div>
+{% endblock %}

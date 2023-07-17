@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<style>
+    * {box-sizing:border-box;}
+
+    body { margin:0;padding:0; }
+
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 2% 0;
+    }
+
+    th, td{
+    text-align: left;
+    padding: 1.5% 2.5%;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
+
+    th {
+    background-color: navy;
+    color: white;
+    }
+
+    .cancel-btn-enable{
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5%;
+    padding: 12% 20%;
+    }
+
+    .cancel-btn-disable{
+    background-color: DimGray;
+    color: white;
+    border: none;
+    border-radius: 5%;
+    padding: 12% 20%;
+    }
+</style>
+<script>
+    window.onload = function(){
+    user = {{ user }}
+    if (user == login){
+    document.getElementById("login").innerText = "logout";
+    document.getElementById("login").setAttribute("href", "/logout")
+    }
+  }
+</script>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Transaction Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in OrderList %}
+            {% for i in range(order.get_bought_products()|length) %}
+            <tr>
+                <td>{{ order.get_sales_id() }}</td>
+                <td>{{ order.get_bought_products()[i]['Product'].get_Name() }}</td>
+                <td>{{ order.get_bought_products()[i]['Product'].get_Price() }}</td>
+                <td>{{ order.get_bought_products()[i]['Quantity'] }}</td>
+                {% if order.get_status() == 'pending' %}
+                <td style="color: #ffc107;">{{ order.get_status() }}</td>
+                {% else %}
+                <td style="color: green;">{{ order.get_status() }}</td>
+                {% endif %}
+                <td>{{ order.get_transaction_date() }}</td>
+                <td style="width: 12%;">
+                    <form action="{{url_for('cancelOrder', id=order.get_sales_id(), index=i)}}" method="POST">
+                        {% if order.get_status() == 'pending' %}
+                        <input type="submit" value="Cancel" class="cancel-btn-enable" style="width:100%;">
+                        {% else %}
+                        <input type="submit" value="Cancel" class="cancel-btn-disable" style="width:100%;" disabled>
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

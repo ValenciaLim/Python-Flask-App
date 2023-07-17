@@ -1,0 +1,55 @@
+{% extends "base_admin.html" %}
+{% block title %}Library Loan System - Manage Products{% endblock %}
+
+{% block content %}
+<style>
+    .images {
+    width: 100%;
+    }
+</style>
+
+<div class="col p-4">
+<div class="card border-dark mb-3">
+<div class="card-header">
+    <h1 class="text-center mb-0">View Products</h1>
+</div>
+<p class="text-center mb-0">There are total of {{ count }} Laptops.</p>
+<div class="card-body">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Images</th>
+                <th>Model Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>CPU</th>
+                <th>Graphics Card</th>
+                <th>Weight(kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for laptop in laptopsList %}
+            <tr>
+                <td>{{ laptop.get_laptopID() }}</td>
+                <td><img class="images" src= {{ laptop.get_Image() }}></td>
+                <td>{{ laptop.get_Name() }}</td>
+                <td>{{ laptop.get_Price() }}</td>
+                <td>{{ laptop.get_Quantity() }}</td>
+                <td>{{ laptop.get_Cpu() }}</td>
+                <td>{{ laptop.get_Graphic() }}</td>
+                <td>{{ laptop.get_Weight() }}</td>
+                <td><a href="/Updateproduct/{{laptop.get_laptopID()}}/{{ 0|string }}" class="btn btn-warning">Update</a></td>
+                <td>
+                    <form action="{{url_for('Deleteproduct', id=laptop.get_laptopID())}}" method="POST">
+                        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+{% endblock %}

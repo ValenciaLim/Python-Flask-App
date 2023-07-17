@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+{% block content %}
+{% from "includes/_formhelper.html" import render_field %}
+
+<style>
+ h1{
+ text-align: center;
+ }
+ form{
+ width: 25%;
+ margin: 2% auto;
+ border: 1px navy solid;
+ padding: 3%;
+ }
+ input[type=text],input[type=password]{
+ width:90%
+ }
+ .form-group{
+ margin: 5% 0;
+ }
+ .btn-btn-primary{
+ background-color: navy;
+ border:none;
+ display: inline;
+ padding: 2% 5%;
+ }
+ .login-option{
+ text-align: center;
+ margin: 0 auto;
+ }
+label{
+display:block;
+ }
+ input[type=submit]{
+ background-color:navy;
+ color: white;
+ padding: 2% 5%;
+ border:none;
+ }
+
+</style>
+
+<h1 class="display-4">Forgot Your Password?</h1>
+<form method="POST" action="">
+  <div class="form-group">
+ {{ render_field(form.Username, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.new_password, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.confirmnew_password, class="form-control") }}
+ </div>
+ <input type="submit" value="Confirm">
+</form>
+{% endblock %}
+
